@@ -1,5 +1,6 @@
 from collections import Counter
 import pandas as pd
+from tqdm import tqdm
 
 class MessageHDD():
     
@@ -46,7 +47,7 @@ class MessageHDD():
         types_list = list(set(text))
 
         for items in types_list:
-            prob = hyper(1, min(ntokens, self.max_len), ntokens_corpus, frequency_dict[items]) #random sample is message length
+            prob = hyper(0, min(ntokens, self.max_len), ntokens_corpus, frequency_dict[items]) #random sample is message length
             prob_sum += prob
         if self.mode == 'sum':
             return prob_sum 
@@ -55,7 +56,13 @@ class MessageHDD():
                 return prob_sum / ntokens
             except:
                 return None
-    
+            
+        elif self.mode == 'root':
+            try:
+                return prob_sum / ntokens**0.5
+            except:
+                return None
+  
     def fit(self, texts):
         '''
         function that prepares a corpus for the metric calculation
@@ -90,7 +97,7 @@ class MessageHDD():
         '''
         hdds = []
 
-        for text in self.texts:
+        for text in tqdm(self.texts):
             hdds.append(self.hdd(text, self.corpus_frequency_dict, self.ntokens_corpus))
 
         return hdds
