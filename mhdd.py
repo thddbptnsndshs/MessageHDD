@@ -37,7 +37,7 @@ class MessageHDD():
             #probability a word will occur at least once in a sample of a particular size
             try:
                 prob_1 = 1.0 - (float((choose(freq, successes) * choose((population_size - freq),(sample_size - successes)))) / float(choose(population_size, sample_size)))
-                prob_1 = prob_1 * (1/sample_size)
+#                 prob_1 = prob_1 * (1/sample_size)
             except ZeroDivisionError:
                 prob_1 = 0
             return prob_1
